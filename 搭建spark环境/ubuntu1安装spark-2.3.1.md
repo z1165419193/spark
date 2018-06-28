@@ -1,16 +1,24 @@
-<h1><center>ubuntu16.04安装spark-2.3.1
+#<center>ubuntu16.04安装spark-2.3.1
 
-<h5/>1.下载spark-2.3.1.tgz，[前往下载](http://spark.apache.org/downloads.html)
-![](http://chuantu.biz/t6/335/1530154971x-1566688742.png)
-选择spark-2.3.1-bin-hadoop2.7,该版本spark需要Scala2.11，和hadoop2.7+，所以我们还需要去[下载Scala2.11.12](https://scala-lang.org/download/2.11.12.html)和[hadoop2.7.6](http://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common/hadoop-2.7.6/)
-![](http://chuantu.biz/t6/335/1530155477x-1566688676.bmp)  
-![](http://chuantu.biz/t6/335/1530155724x-1566688676.bmp)
-###2.将三个文件分别解压到/usr/spark文件夹下,先创建/usr/spark
+###1.下载spark-2.3.1.tgz，[前往下载](http://spark.apache.org/downloads.html)  
+
+![](http://chuantu.biz/t6/335/1530154971x-1566688742.png)  
+
+选择spark-2.3.1-bin-hadoop2.7,该版本spark需要Scala2.11，和hadoop2.7+，所以我们还需要去[下载Scala2.11.12](https://scala-lang.org/download/2.11.12.html)和[hadoop2.7.6](http://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common/hadoop-2.7.6/)  
+
+![](http://chuantu.biz/t6/335/1530155477x-1566688676.bmp)    
+
+![](http://chuantu.biz/t6/335/1530155724x-1566688676.bmp)  
+
+###2.将三个文件分别解压到/usr/spark文件夹下,先创建/usr/spark  
+
 	mkdir /usr/spark
 	tar -zxvf scala-2.11.12.tgz -C /usr/spark/
     tar -zxvf spark-2.3.1-bin-hadoop2.7.tgz -C /usr/spark/
-    tar -zxvf hadoop-2.7.6.tar.gz -C /usr/spark/
-设置环境变量gedit /etc/profile
+    tar -zxvf hadoop-2.7.6.tar.gz -C /usr/spark/  
+
+设置环境变量gedit /etc/profile  
+
 ```
 sudo gedit /etc/profile
 //在文件末尾追加如下代码，默认当前设备已设置了jdk1.8+；
@@ -34,10 +42,14 @@ export PATH=$PATH:$SPARK_HOME/bin
 #hadoop env
 export HADOOP_HOME=/usr/spark/hadoop-2.7.6
 export PATH=$PATH:HADOOP_HOME/bin
-```
-注意：使用`source /etc/profile` 命令使其生效
-###3、设置hasoop配置文件
-####（1）新建以下目录
+```  
+
+注意：使用`source /etc/profile` 命令使其生效  
+
+###3、设置hasoop配置文件  
+
+####（1）新建以下目录  
+
 ```
 cd /usr/spark
 sudo mkdir hadoop
@@ -46,8 +58,10 @@ fenglulu@fenglulu-Aspire-E5-572G:/usr/spark$ sudo mkdir hadoop/hdfs/data
 fenglulu@fenglulu-Aspire-E5-572G:/usr/spark$ sudo mkdir hadoop/hdfs/name
 fenglulu@fenglulu-Aspire-E5-572G:/usr/spark$ sudo mkdir hadoop/temp
 ```
-####(2)修改`/usr/spark/hadoop-2.7.6/etc/hadoop/`文件夹下的多个配置文件
-a.修改core-site.xml
+####(2)修改`/usr/spark/hadoop-2.7.6/etc/hadoop/`文件夹下的多个配置文件  
+
+a.修改core-site.xml  
+
 ```
 <configuration>
  <property>
@@ -62,7 +76,8 @@ a.修改core-site.xml
 </property>
 </configuration>
 ```
-b.修改hdfs-site.xml
+b.修改hdfs-site.xml  
+
 ```
 <configuration>
 <property>
@@ -86,7 +101,8 @@ b.修改hdfs-site.xml
 </property>
 </configuration>
 ```
-c.修改mapred-site.xml
+c.修改mapred-site.xml  
+
 ```   
 <property>
         <name>mapreduce.framework.name</name>
@@ -101,7 +117,8 @@ c.修改mapred-site.xml
         <value>master:19888</value>  
 </property> 
 ```
-d.修改yarn-site.xml
+d.修改yarn-site.xml  
+
 ```
 <configuration>
 
@@ -136,16 +153,20 @@ d.修改yarn-site.xml
     </property>  
 </configuration>
 ```
-e.接着将hadoop-env.sh,mapred-env.sh,yarn-env.sh中的JAVA_HOME都修改为我们配置好的java路径（根据个人jdk设置而定）
-比如，我的是`JAVA_HOME=/home/fenglulu/java/jdk1.8.0_171`
-<1>查看hadoop-env.sh
+e.接着将hadoop-env.sh,mapred-env.sh,yarn-env.sh中的JAVA_HOME都修改为我们配置好的java路径（根据个人jdk设置而定）  
+
+比如，我的是`JAVA_HOME=/home/fenglulu/java/jdk1.8.0_171`  
+
+<1>查看hadoop-env.sh  
+
 ```
 #The java implementation to use.
 export JAVA_HOME=${JAVA_HOME}
 ```
 JAVA_HOME已导入
 
-<2>查看yarn-env-sh
+<2>查看yarn-env-sh  
+
 ```
 # some Java parameters
 # export JAVA_HOME=/home/y/libexec/jdk1.6.0/
@@ -155,8 +176,10 @@ if [ "$JAVA_HOME" != "" ]; then
   JAVA_HOME=$JAVA_HOME
 fi
 ```
-能够自动导入JAVA_HOME
-<3>查看mapred-env.sh
+能够自动导入JAVA_HOME  
+
+<3>查看mapred-env.sh  
+
 添加JAVA_HOME
 ```
 # export JAVA_HOME=/home/y/libexec/jdk1.6.0/

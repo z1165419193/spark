@@ -1,4 +1,4 @@
-#<center>ubuntu16.04安装spark-2.3.1
+#ubuntu16.04安装spark-2.3.1
 
 ###1.下载spark-2.3.1.tgz，[前往下载](http://spark.apache.org/downloads.html)  
 

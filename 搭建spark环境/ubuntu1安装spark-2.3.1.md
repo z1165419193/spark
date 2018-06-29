@@ -46,7 +46,7 @@ export PATH=$PATH:HADOOP_HOME/bin
 
 注意：使用`source /etc/profile` 命令使其生效  
 
-###3、设置hasoop配置文件  
+###3、设置hadoop配置文件  
 
 ####（1）新建以下目录  
 
@@ -186,5 +186,110 @@ fi
 export JAVA_HOME=${JAVA_HOME}
 export HADOOP_JOB_HISTORYSERVER_HEAPSIZE=1000
 ```
-####4、  
+####4、配置hadoop节点信息  
+修改/usr/spark/hadoop-2.7.6/etc/hadoop/下的slaves文件，添加节点，本次预计使用三个slave节点,内容如下：  
+```
+localhost
+slave1
+slave2
+slave3
+```  
+修改主机hosts文件，内容如下：  
+
+![](http://chuantu.biz/t6/336/1530256065x-1404729680.bmp)  
+修改主机名称gedit /etc/hostname  
+
+```
+gedit /etc/hostname
+```  
+5、配置ssh无密码登录
+
+(1)ubuntu自带ssh-client，我们还需要ssh-server
+
+apt-get install openssh-server
+
+(2)启动ssh服务
+
+/etc/init.d/ssh start
+
+(3)查看sshd是否启动
+
+ps -e | grep ssh  
+
+(4)root账户默认不允许登录ssh，修改权限
+
+`gedit /etc/ssh/sshd_config`
+
+找到Authentication，修改PermitRootLogin yes，保存
+
+```
+/etc/init.d/ssh restart
+```
+
+(5)ssh登录本地
+
+`ssh localhost`
+
+SSH首次登录会有提示，直接输入yes即可，这时是需要密码的
+
+(6)生成秘钥
+
+`ssh-keygen -t rsa`
+
+之后一直按Enter键，默认将秘钥保存在.shh/id_rsa文件中
+
+(7)RSA公钥加入授权文件
+
+cd .ssh
+
+cp id_rsa.pub authorized_keys
+
+(8)重新登录，实现免密码登录localhost
+
+6、配置master免密码登录slave1
+
+这里使用scp命令，可自行搜索相关信息，配置确保slave1节点已安装ssh-server
+
+(1)将master根目录下密码复制到slave1的根目录下
+
+root@master:~# scp ~/.ssh/id_rsa.pub root@slave1:~/.ssh
+
+(2)在slave1节点将RSA公钥加入授权文件
+
+root@slave:~# cp .ssh/id_rsa.pub authorized_keys
+
+如有多台计算机，重复以上操作即可
+
+(3)在master节点上ssh登录slave1,实现免密码登录
+
+ssh slave1
+
+7、配置slave1节点的hadoop，同master节点，复制过去即可
+
+8、Hadoop运行
+
+(1)格式化分布式文件系统，在master节点下
+
+cd /usr/local/hadoop/hadoop-2.7.3
+
+bin/hadoop namenode -format
+
+(2)启动hadoop守护进程
+
+sbin/start-all.sh
+
+(3)检测启动情况
+
+jps
+
+这时在master节点可以看到NameNode，SecondaryNameNode，ResourceManager
+
+在slave1节点可以看到DataNode，NodeManager，因为我也将master节地点添加为slaves，所以也能看到类似信息
+
+(4)停止hadoop进程
+
+sbin/stop-all.sh
+
+到这里我们已经配置好了hadoop完全分布式环境，有兴趣可查看我的另一篇博客，用python实现MapReduce实例。
+
 《未完待续》

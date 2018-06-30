@@ -155,37 +155,6 @@ d.修改yarn-site.xml
 ```
 e.接着将hadoop-env.sh,mapred-env.sh,yarn-env.sh中的JAVA_HOME都修改为我们配置好的java路径（根据个人jdk设置而定）  
 
-比如，我的是`JAVA_HOME=/home/fenglulu/java/jdk1.8.0_171`  
-
-<1>查看hadoop-env.sh  
-
-```
-#The java implementation to use.
-export JAVA_HOME=${JAVA_HOME}
-```
-JAVA_HOME已导入
-
-<2>查看yarn-env-sh  
-
-```
-# some Java parameters
-# export JAVA_HOME=/home/y/libexec/jdk1.6.0/
-
-if [ "$JAVA_HOME" != "" ]; then
-  #echo "run java in $JAVA_HOME"
-  JAVA_HOME=$JAVA_HOME
-fi
-```
-能够自动导入JAVA_HOME  
-
-<3>查看mapred-env.sh  
-
-添加JAVA_HOME
-```
-# export JAVA_HOME=/home/y/libexec/jdk1.6.0/
-export JAVA_HOME=${JAVA_HOME}
-export HADOOP_JOB_HISTORYSERVER_HEAPSIZE=1000
-```
 ####4、配置hadoop节点信息  
 修改/usr/spark/hadoop-2.7.6/etc/hadoop/下的slaves文件，添加节点，本次预计使用三个slave节点,内容如下：  
 ```

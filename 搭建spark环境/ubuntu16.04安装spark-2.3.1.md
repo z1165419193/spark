@@ -209,9 +209,9 @@ SSH首次登录会有提示，直接输入yes即可，这时是需要密码的
 
 (7)RSA公钥加入授权文件
 
-cd .ssh
+`cd .ssh`
 
-cp id_rsa.pub authorized_keys
+`cp id_rsa.pub authorized_keys`
 
 (8)重新登录，实现免密码登录localhost
 
@@ -221,17 +221,17 @@ cp id_rsa.pub authorized_keys
 
 (1)将master根目录下密码复制到slave1的根目录下
 
-root@master:~# scp ~/.ssh/id_rsa.pub root@slave1:~/.ssh
+`root@master:~# scp ~/.ssh/id_rsa.pub root@slave1:~/.ssh`
 
 (2)在slave1节点将RSA公钥加入授权文件
 
-root@slave:~# cp .ssh/id_rsa.pub authorized_keys
+`root@slave:~# cp .ssh/id_rsa.pub authorized_keys`
 
 如有多台计算机，重复以上操作即可
 
 (3)在master节点上ssh登录slave1,实现免密码登录
 
-ssh slave1
+`ssh slave1`
 
 7、配置slave1节点的hadoop，同master节点，复制过去即可
 
@@ -239,17 +239,17 @@ ssh slave1
 
 (1)格式化分布式文件系统，在master节点下
 
-cd /usr/local/hadoop/hadoop-2.7.3
+`cd /usr/local/hadoop/hadoop-2.7.3`
 
-bin/hadoop namenode -format
+`bin/hadoop namenode -format`
 
 (2)启动hadoop守护进程
 
-sbin/start-all.sh
+`sbin/start-all.sh`
 
 (3)检测启动情况
 
-jps
+`jps`
 
 这时在master节点可以看到NameNode，SecondaryNameNode，ResourceManager
 
@@ -257,6 +257,61 @@ jps
 
 (4)停止hadoop进程
 
-sbin/stop-all.sh
+`sbin/stop-all.sh  `
+
+9、修改spark配置文件
+
+1)$SPARK_HOME/conf/spark-env.sh
+
+    `cp spark-env.sh.template spark-env.sh`  
+    
+    添加以下内容:  
+    ```
+    export SCALA_HOME=/usr/spark/scala-2.11.12
+    export JAVA_HOME=/home/fenglulu/java/jdk1.8.0_171
+    export SPARK_MASTER_IP=master
+    export SPARK_WORKER_MEMORY=512m
+    export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
+```  
+
+2)$SPARK_HOME/conf/slaves
+
+    `cp slaves.template slaves`  
+    
+    添加以下内容:
+    ```
+    master
+    slave1
+```  
+
+3.以上配置均在master节点进行，接下来将配置好的文件复制到slave节点，确保路径等均一致，不清楚的可以先看配置hadoop的文章
+
+10. 集群启动
+
+启动spark集群  
+ 
+`cd $SPARK_HOME`
+`sbin/start-all.sh`  
+
+2.查看
+
+`jps`
+
+3.结果  
+master节点  
+```
+    8608 Worker
+    8488 Master
+    8670 Jps
+```
+slave1节点：
+
+```
+    6737 Worker
+    6774 Jps
+
+4.关闭集群
+
+`sbin/stop-all.sh`  
 
 《未完待续》

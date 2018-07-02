@@ -155,11 +155,8 @@ d.修改yarn-site.xml
 ```
 e.接着将hadoop-env.sh,mapred-env.sh,yarn-env.sh中的JAVA_HOME都修改为我们配置好的java路径（根据个人jdk设置而定）  
 
-
-####4、配置hadoop节点信息（2018-6-29更新）  
-
+####4、配置hadoop节点信息  
 修改/usr/spark/hadoop-2.7.6/etc/hadoop/下的slaves文件，添加节点，本次预计使用三个slave节点,内容如下：  
-
 ```
 localhost
 slave1
@@ -174,7 +171,7 @@ slave3
 ```
 gedit /etc/hostname
 ```  
-####5、配置ssh无密码登录
+5、配置ssh无密码登录
 
 (1)ubuntu自带ssh-client，我们还需要ssh-server
 
@@ -218,7 +215,7 @@ cp id_rsa.pub authorized_keys
 
 (8)重新登录，实现免密码登录localhost
 
-####6、配置master免密码登录slave1
+6、配置master免密码登录slave1
 
 这里使用scp命令，可自行搜索相关信息，配置确保slave1节点已安装ssh-server
 

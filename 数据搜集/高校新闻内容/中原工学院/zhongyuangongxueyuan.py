@@ -2,6 +2,8 @@ import urllib.request
 from bs4 import BeautifulSoup
 import re
 
+def resapce(word):
+    return word.replace('\n','').replace('\r','').replace('\t','').replace(' ','').replace('\xa0','').replace('&nbsp;','')
 def get_text(url1):
     html1=urllib.request.urlopen(url1).read().decode('utf-8')
     soup1=BeautifulSoup(html1)
@@ -11,15 +13,15 @@ def get_text(url1):
         url2= 'http://lib.zut.edu.cn/news/detail/aid/'+str(id)
         print(url2)
         with open('zhongyuangongxueyuan.txt','a+',encoding='utf-8') as f:
-            f.writelines(url2)
+            f.writelines(url2+'\n')
         html2=urllib.request.urlopen(url2).read().decode('utf-8')
         soup2=BeautifulSoup(html2)
         title=soup2.find_all('div','cont-title','h2')
         for t1 in title:
-            tit=t1.get_text()
+            tit=resapce(t1.get_text())
             print(title)
             with open('zhongyuangongxueyuan.txt' ,'a+', encoding='utf-8') as f:
-                f.writelines(tit)
+                f.writelines(tit+' ')
         content=soup2.find_all('div','cont-main','p')
         for c1 in content:
             con = c1.get_text()

@@ -300,16 +300,20 @@ SSH首次登录会有提示，直接输入yes即可，这时是需要密码的
 3.结果  
 master节点  
 ```
-    8608 Worker
-    8488 Master
-    8670 Jps
+root@master:/usr/spark/spark-2.3.1-bin-hadoop2.7# jps
+16422 Jps
+9238 SecondaryNameNode
+16217 Master
+6317 ResourceManager
+5821 NameNode
+16350 Worker
 ```
 slave1节点：
 
 ```
     6737 Worker
     6774 Jps
-
+```
 4.关闭集群
 
 `sbin/stop-all.sh`  

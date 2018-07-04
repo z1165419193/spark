@@ -1,4 +1,4 @@
-#ubuntu16.04安装spark-2.3.1
+#ubuntu16.04安装spark-2.3.1（伪分布式搭建：单机上两个节点master与slave1）
 
 ###1.下载spark-2.3.1.tgz，[前往下载](http://spark.apache.org/downloads.html)  
 
@@ -311,6 +311,7 @@ SSH首次登录会有提示，直接输入yes即可，这时是需要密码的
 
 3.结果  
 
+hadoop运行结果   
 master节点  
 
 ```

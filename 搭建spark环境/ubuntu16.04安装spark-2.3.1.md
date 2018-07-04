@@ -157,19 +157,33 @@ e.接着将hadoop-env.sh,mapred-env.sh,yarn-env.sh中的JAVA_HOME都修改为我
 
 ####4、配置hadoop节点信息  
 修改/usr/spark/hadoop-2.7.6/etc/hadoop/下的slaves文件，添加节点，本次预计使用三个slave节点,内容如下：  
+(2018-7-4更新：在一台电脑上配置两个节点，master与slave1.)
 ```
-localhost
+master
 slave1
-slave2
-slave3
 ```  
 修改主机hosts文件，内容如下：  
+```
+127.0.0.1	localhost
 
-![](http://chuantu.biz/t6/336/1530256065x-1404729680.bmp)  
+192.168.3.221  master
+192.168.3.221  slave1
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+```
+  
 修改主机名称gedit /etc/hostname  
 
 ```
 gedit /etc/hostname
+---
+master
+slave1
 ```  
 5、配置ssh无密码登录
 
@@ -262,11 +276,9 @@ SSH首次登录会有提示，直接输入yes即可，这时是需要密码的
 9、修改spark配置文件
 
 1)$SPARK_HOME/conf/spark-env.sh
-
-    `cp spark-env.sh.template spark-env.sh`  
-    
-    添加以下内容:  
-    ```
+`cp spark-env.sh.template spark-env.sh`  
+添加以下内容:
+```
     export SCALA_HOME=/usr/spark/scala-2.11.12
     export JAVA_HOME=/home/fenglulu/java/jdk1.8.0_171
     export SPARK_MASTER_IP=master
@@ -274,12 +286,12 @@ SSH首次登录会有提示，直接输入yes即可，这时是需要密码的
     export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 ```  
 
-2)$SPARK_HOME/conf/slaves
+2)$SPARK_HOME/conf/slaves  
 
-    `cp slaves.template slaves`  
-    
-    添加以下内容:
-    ```
+`cp slaves.template slaves`  
+
+添加以下内容:
+```
     master
     slave1
 ```  
@@ -298,8 +310,28 @@ SSH首次登录会有提示，直接输入yes即可，这时是需要密码的
 `jps`
 
 3.结果  
+
 master节点  
+
 ```
+<<<<<<< HEAD
+root@master:/usr/spark/hadoop-2.7.6# jps
+11826 DataNode
+19794 Jps
+19352 ResourceManager
+11673 NameNode
+19661 NodeManager
+12078 SecondaryNameNode
+```  
+
+slave1节点：
+
+```
+应该与master主机显示的一样，因为是单机上的伪分布式环境
+```
+![数据节点](http://chuantu.biz/t6/338/1530691654x-1566688676.bmp)
+<img src=http://chuantu.biz/t6/338/1530691742x-1566688676.bmp />
+=======
 root@master:/usr/spark/spark-2.3.1-bin-hadoop2.7# jps
 16422 Jps
 9238 SecondaryNameNode
@@ -314,6 +346,7 @@ slave1节点：
     6737 Worker
     6774 Jps
 ```
+>>>>>>> master
 4.关闭集群
 
 `sbin/stop-all.sh`  

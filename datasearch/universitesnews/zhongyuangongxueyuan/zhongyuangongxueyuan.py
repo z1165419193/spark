@@ -22,11 +22,13 @@ def get_text(url1):
             print(title)
             with open('zhongyuangongxueyuan.txt' ,'a+', encoding='utf-8') as f:
                 f.writelines(tit+' ')
+        with open('zhongyuangongxueyuan.txt', 'a+', encoding='utf-8') as f:
+            f.writelines( '\n ')
         content=soup2.find_all('div','cont-main','p')
         for c1 in content:
-            con = c1.get_text()
+            con =resapce(c1.get_text())
             with open('zhongyuangongxueyuan.txt', 'a+', encoding='utf-8') as f:
-                f.writelines(con)
+                f.writelines(con+'\n')
 
 def main(id):
     url = 'http://lib.zut.edu.cn/news/listNew/cid/10/page/'+str(id)
